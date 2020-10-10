@@ -12,7 +12,7 @@ A display will be black if he has not renderers, to add one just use `Display#ad
 Display can be used by players, for listening when a player will tap the display, use `Display#addListener(TouchListener)`. The listener will receive, the display where it has been touched, the player, the position X,Y in pixels on the display, and a boolean true if it is a left click or false if it is a right click.
 
 # How to use in my project:
-- Install the Plugin on your server, find it on [SpigotMC]() or build it from this repository
+- Install the Plugin on your server, find it on [SpigotMC](https://www.spigotmc.org/resources/minecraftmaps.84639/) or build it from this repository
 - Add the plugin to your project:
   - Manually: Add the jar to your project dependencies
   - Using gradle:

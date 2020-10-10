@@ -55,8 +55,6 @@ public class MinecraftMaps extends JavaPlugin {
             return;
         }
 
-        saveDefaultConfig();
-
         log(ChatColor.DARK_GREEN + "Plugin successfully loaded");
 
         loaded = true;
