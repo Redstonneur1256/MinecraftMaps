@@ -17,10 +17,10 @@ public class v1_12_R1 implements Call.VersionAdapter {
     }
 
     @Override
-    public void sendMap(Player player, short id, byte scale, boolean b, List<?> icons, byte[] data, int x, int y,
+    public void sendMap(Player player, short id, byte scale, List<?> icons, byte[] data, int x, int y,
                         int w, int h) {
 
-        Object packet = new PacketPlayOutMap(id, scale, b, (List<MapIcon>) icons, data, x, y, w, h);
+        Object packet = new PacketPlayOutMap(id, scale, true, (List<MapIcon>) icons, data, x, y, w, h);
         sendPacket(player, packet);
     }
 

@@ -4,7 +4,9 @@ import fr.redstonneur1256.maps.MinecraftMaps;
 import fr.redstonneur1256.redutilities.Utils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.map.MapView;
 
 import java.util.List;
 
@@ -57,9 +59,9 @@ public class Call {
         adapter.sendPacket(player, packet);
     }
 
-    public static void sendMap(Player player, short id, byte scale, boolean b, List<?> icons, byte[] data,
+    public static void sendMap(Player player, short id, byte scale, List<?> icons, byte[] data,
                                int x, int y, int w, int h) {
-        adapter.sendMap(player, id, scale, b, icons, data, x, y, w, h);
+        adapter.sendMap(player, id, scale, icons, data, x, y, w, h);
     }
 
 
@@ -67,7 +69,7 @@ public class Call {
 
         void sendPacket(Player player, Object packet);
 
-        void sendMap(Player player, short id, byte scale, boolean b, List<?> icons, byte[] data, int x, int y,
+        void sendMap(Player player, short id, byte scale, List<?> icons, byte[] data, int x, int y,
                      int w, int h);
 
     }

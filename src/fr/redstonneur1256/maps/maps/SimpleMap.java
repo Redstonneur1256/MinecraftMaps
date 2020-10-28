@@ -1,7 +1,10 @@
 package fr.redstonneur1256.maps.maps;
 
+import fr.redstonneur1256.maps.MinecraftMaps;
 import fr.redstonneur1256.maps.adapters.Call;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
@@ -16,13 +19,17 @@ public class SimpleMap {
     private short id;
     private byte[] data;
 
-    public SimpleMap(short id) {
+    public SimpleMap(World world, short id) {
         this.id = id;
         this.data = new byte[128 * 128];
 
         Arrays.fill(data, (byte) 0);
 
         MapView map = Bukkit.getMap(id);
+        if(map == null) {
+            MinecraftMaps.log(ChatColor.RED + "Failed to remove default renderers for map " + id + ", map can blink.");
+            return;
+        }
         for(MapRenderer renderer : new ArrayList<>(map.getRenderers())) {
             map.removeRenderer(renderer);
         }
@@ -42,7 +49,7 @@ public class SimpleMap {
         MapView.Scale scale = MapView.Scale.FARTHEST;
         List<?> icons = new ArrayList<>();
 
-        Call.sendMap(player, id, (byte) scale.ordinal(), true, icons, data, 0, 0, 128, 128);
+        Call.sendMap(player, id, (byte) scale.ordinal(), icons, data, 0, 0, 128, 128);
 
     }
 

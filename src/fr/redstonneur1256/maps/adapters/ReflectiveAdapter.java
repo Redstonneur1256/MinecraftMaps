@@ -40,7 +40,11 @@ public class ReflectiveAdapter implements Call.VersionAdapter {
         Class<?> packetMap = getNMSClass("PacketPlayOutMap");
 
         List<Class<?>> constructorBuilder = new ArrayList<>(Arrays.asList(int.class, byte.class));
-        int bools = versionValue < 9 ? 0 : versionValue < 12 ? 1 : 2;
+        int bools = versionValue < 9 ?
+                0 :
+                versionValue < 13 ?
+                        1 :
+                        2;
         for(int i = 0; i < bools; i++) {
             constructorBuilder.add(boolean.class);
         }
@@ -70,16 +74,16 @@ public class ReflectiveAdapter implements Call.VersionAdapter {
     }
 
     @Override
-    public void sendMap(Player player, short id, byte scale, boolean b, List<?> icons, byte[] data, int x, int y, int w, int h) {
-        sendPacket(player, createPacket(id, scale, b, icons, data, x, y, w, h));
+    public void sendMap(Player player, short id, byte scale, List<?> icons, byte[] data, int x, int y, int w, int h) {
+        sendPacket(player, createPacket(id, scale, icons, data, x, y, w, h));
     }
 
-    private Object createPacket(short id, byte scale, boolean b, List<?> icons, byte[] data, int x, int y, int w, int h) {
+    private Object createPacket(short id, byte scale, List<?> icons, byte[] data, int x, int y, int w, int h) {
         return versionValue < 9 ?
                 packetConstructor.build(id, scale, icons, data, x, y, w, h) :
                 versionValue < 13 ?
-                        packetConstructor.build(id, scale, b, icons, data, x, y, w, h) :
-                        packetConstructor.build(id, scale, b, true, icons, data, x, y, w, h);
+                        packetConstructor.build(id, scale, true, icons, data, x, y, w, h) :
+                        packetConstructor.build(id, scale, true, true, icons, data, x, y, w, h);
     }
 
 

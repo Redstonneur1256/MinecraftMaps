@@ -5,6 +5,7 @@ import fr.redstonneur1256.maps.maps.Mode;
 import fr.redstonneur1256.maps.maps.SimpleMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -19,6 +20,7 @@ import java.util.Objects;
 
 public class Display {
 
+    private World world;
     private int width, height;
     private SimpleMap[] maps;
     private List<Renderer> renderers;
@@ -27,11 +29,12 @@ public class Display {
     private BufferedImage buffer;
     private BukkitTask updateTask;
 
-    public Display(int width, int height, short idStart) {
-        this(width, height, idStart, Mode.global);
+    public Display(World world, int width, int height, short idStart) {
+        this(world, width, height, idStart, Mode.global);
     }
 
-    public Display(int width, int height, short idStart, Mode mode) {
+    public Display(World world, int width, int height, short idStart, Mode mode) {
+        this.world = world;
         this.width = width;
         this.height = height;
         this.maps = new SimpleMap[width * height];
@@ -41,7 +44,7 @@ public class Display {
         this.buffer = new BufferedImage(width * 128, height * 128, BufferedImage.TYPE_INT_ARGB);
 
         for(int i = 0; i < this.maps.length; i++) {
-            SimpleMap map = new SimpleMap((short) (idStart + i));
+            SimpleMap map = new SimpleMap(world, (short) (idStart + i));
             maps[i] = map;
         }
 
@@ -54,6 +57,34 @@ public class Display {
         for(Player player : Bukkit.getOnlinePlayers()) {
             update(player);
         }
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getWidthResolution() {
+        return width * 128;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getHeightResolution() {
+        return height * 128;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
     }
 
     public void update(Player player) {

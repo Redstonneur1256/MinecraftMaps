@@ -11,7 +11,8 @@ public class EmptyAdapter implements Call.VersionAdapter {
     }
 
     @Override
-    public void sendMap(Player player, short id, byte scale, boolean b, List<?> icons, byte[] data, int x, int y, int w, int h) {
+    public void sendMap(Player player, short id, byte scale, List<?> icons, byte[] data, int x, int y, int w, int h) {
 
     }
+
 }
