@@ -1,6 +1,11 @@
 # MinecraftMaps
 MinecraftMaps is a plugin used to create interactive in game displays.
 
+# Issues
+Please do not submit issues, the plugin is currently totally reworked.
+
+
+# API
 Creating a display took in parameters the width and height in blocks, the maps starting id, and a mode (global/player)
 ````java
 Display myDisplay = new Display(width, height, mapsStart, mode);
