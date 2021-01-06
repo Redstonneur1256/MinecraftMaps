@@ -16,6 +16,7 @@ Display can be used by players, for listening when a player will tap the display
 - Add the plugin to your project:
   - Manually: Add the jar to your project dependencies
   - Using gradle:
+    - Now on jitpack but I need to push everything from my computer (heavy changes)
     - Clone the repository on your computer
     - Run the following commands to update & install it:
       - `git pull`
