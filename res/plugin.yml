@@ -1,6 +1,0 @@
-name: 'MinecraftMaps'
-author: 'Redstnoneur1256'
-version: '1.0'
-main: 'fr.redstonneur1256.maps.MinecraftMaps'
-commands:
-  video: { }

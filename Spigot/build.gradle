@@ -1,0 +1,22 @@
+
+dependencies {
+    compile project(':API')
+    implementation "org.bstats:bstats-bukkit:${versions.bstats}"
+    compileOnly "org.spigotmc:spigot-api:${versions.spigot}"
+}
+
+shadowJar {
+    relocate 'org.bstats', 'fr.redstonneur1256.maps.spigot.util'
+}
+
+if(devPath != null && !devPath.isEmpty()) {
+    task buildAndCopy {
+        dependsOn shadowJar
+        doLast {
+            copy {
+                from "$buildDir/libs/${jar.archiveFileName.get()}"
+                into "$devPath/minecraft/plugins"
+            }
+        }
+    }
+}

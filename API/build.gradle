@@ -1,0 +1,5 @@
+
+dependencies {
+    compile "org.jetbrains:annotations:${versions.annotations}"
+    compile "com.github.Redstonneur1256:RedUtilities:${versions.redutilities}"
+}
