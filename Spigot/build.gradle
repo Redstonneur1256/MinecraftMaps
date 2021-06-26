@@ -1,15 +1,14 @@
-
 dependencies {
-    compile project(':API')
-    implementation "org.bstats:bstats-bukkit:${versions.bstats}"
     compileOnly "org.spigotmc:spigot-api:${versions.spigot}"
+    api project(':API')
+    api "org.bstats:bstats-bukkit:${versions.bstats}"
 }
 
 shadowJar {
     relocate 'org.bstats', 'fr.redstonneur1256.maps.spigot.util'
 }
 
-if(devPath != null && !devPath.isEmpty()) {
+if (devPath != null && !devPath.isEmpty()) {
     task buildAndCopy {
         dependsOn shadowJar
         doLast {

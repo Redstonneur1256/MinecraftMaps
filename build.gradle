@@ -1,5 +1,4 @@
 plugins {
-    id 'java'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
@@ -12,12 +11,12 @@ ext {
 }
 
 versions.annotations = '16.0.2'
-versions.redutilities = '1.5.2'
+versions.redutilities = '1.5.3'
 versions.bstats = '2.2.1'
 versions.spigot = '1.12.2-R0.1-SNAPSHOT'
 
 allprojects {
-    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'com.github.johnrengelman.shadow'
 
     jar.archiveFileName = "MinecraftMaps-${name}.jar"
@@ -35,16 +34,14 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 
-    compileJava.options.encoding = 'UTF-8'
+    compileJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+        options.encoding = 'UTF-8'
+    }
+
     sourceSets.main.java.srcDirs = ['src/']
     sourceSets.main.resources.srcDirs = ['res/']
     sourceSets.test.java.srcDirs = []
     sourceSets.test.resources.srcDirs = []
-    compileJava.sourceCompatibility = 1.8
-    compileJava.targetCompatibility = 1.8
-}
-
-if (subprojects.size() != 0) {
-    sourceSets.main.java.srcDirs = []
-    sourceSets.main.resources.srcDirs = []
 }

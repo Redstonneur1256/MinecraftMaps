@@ -11,20 +11,22 @@ import org.jetbrains.annotations.NotNull;
 
 public class BukkitDisplay extends DefaultDisplay<Player> {
 
+    protected int id;
     protected MinecraftMaps plugin;
     protected BukkitMap[] maps;
     protected boolean disposed;
     protected Cancellable task;
 
-    public BukkitDisplay(MinecraftMaps plugin, int width, int height, short mapStart, RenderMode mode) {
-        super(width, height, mapStart, mode);
+    public BukkitDisplay(MinecraftMaps plugin, int id, int width, int height, RenderMode mode, short... mapIDs) {
+        super(width, height, mode, mapIDs);
+        this.id = id;
         this.plugin = plugin;
         this.maps = new BukkitMap[width * height];
         this.disposed = false;
         this.task = null;
 
         for(int i = 0; i < maps.length; i++) {
-            maps[i] = new BukkitMap((short) (mapStart + i));
+            maps[i] = new BukkitMap(mapIDs[i]);
         }
     }
 
@@ -58,7 +60,7 @@ public class BukkitDisplay extends DefaultDisplay<Player> {
         }
 
         for(BukkitMap map : maps) {
-            if(map.isModified()) {
+            if(map.isModified() || force) {
                 map.send(player);
             }
         }
@@ -106,6 +108,10 @@ public class BukkitDisplay extends DefaultDisplay<Player> {
         if(disposed) {
             throw new IllegalStateException("The display has been disposed");
         }
+    }
+
+    public int getID() {
+        return id;
     }
 
 }

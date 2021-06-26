@@ -5,6 +5,7 @@ import fr.redstonneur1256.maps.render.MapPalette;
 import fr.redstonneur1256.maps.spigot.adapter.Call;
 import fr.redstonneur1256.maps.spigot.commands.MapsCommand;
 import fr.redstonneur1256.maps.utils.Logger;
+import fr.redstonneur1256.redutilities.TimeUtils;
 import fr.redstonneur1256.redutilities.Utils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -13,6 +14,9 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,19 +52,38 @@ public class MinecraftMaps extends JavaPlugin {
     public void onEnable() {
         try {
             saveDefaultConfig();
-
-            boolean useCache = getConfig().getBoolean("render.colorCache");
-
+            
             Call.setup();
 
             if(!Call.isEnabled()) {
+                Logger.log(ChatColor.DARK_RED + "Disabling plugin.");
                 Bukkit.getPluginManager().disablePlugin(this);
                 return;
             }
 
-            try(InputStream input = getResource("palette.bin")) {
-                MapPalette.loadPalette(input, useCache);
+            File paletteFile = new File(getDataFolder(), "palette.bin");
+            
+            if(!paletteFile.exists()) {
+                Logger.log(ChatColor.WHITE + "The plugin needs to generate so data in order to work");
+                Logger.log(ChatColor.WHITE + "This operation may take few minutes");
+                Logger.log(ChatColor.WHITE + "Generating file " + ChatColor.BLUE + paletteFile.getPath());
+
+                long start = System.currentTimeMillis();
+                try(FileOutputStream output = new FileOutputStream(paletteFile)) {
+                    MapPalette.generatePalette(getResource("palette.bin"), output);
+                }
+                long end = System.currentTimeMillis();
+
+                Logger.log(ChatColor.WHITE + "File generated in " + ChatColor.BLUE + TimeUtils.english.formatMaxSeconds(end - start, true));
             }
+
+            Logger.log(ChatColor.WHITE + "Loading palette...");
+            long start = System.currentTimeMillis();
+            try(InputStream input = new FileInputStream(paletteFile)) {
+                MapPalette.loadPalette(input);
+            }
+            long end = System.currentTimeMillis();
+            Logger.log(ChatColor.WHITE + "Loaded palette in " + ChatColor.BLUE + TimeUtils.english.formatMaxMillis(end - start, true));
 
             getCommand("minecraftMaps").setExecutor(new MapsCommand(this));
 

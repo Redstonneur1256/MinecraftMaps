@@ -19,17 +19,18 @@ public abstract class DefaultDisplay<P> implements Display<P> {
 
     protected int width;
     protected int height;
-    protected short mapStart;
     protected RenderMode mode;
+    protected short[] mapIDs;
     protected List<Renderer<P>> renderers;
     protected List<TouchListener<P>> listeners;
     protected BufferedImage image;
     protected Graphics2D graphics;
-    public DefaultDisplay(int width, int height, short mapStart, RenderMode mode) {
+
+    public DefaultDisplay(int width, int height, RenderMode mode, short[] mapIDs) {
         this.width = width;
         this.height = height;
-        this.mapStart = mapStart;
         this.mode = mode;
+        this.mapIDs = mapIDs;
         this.renderers = new ArrayList<>();
         this.listeners = new ArrayList<>();
         this.image = new BufferedImage(width * MAP_SIZE, height * MAP_SIZE, BufferedImage.TYPE_INT_ARGB);
@@ -58,17 +59,49 @@ public abstract class DefaultDisplay<P> implements Display<P> {
 
     @Override
     public boolean containsMap(short mapID) {
-        return mapID >= mapStart && mapID < mapStart + width * height;
+        return indexOf(mapID) != -1;
     }
 
     @Override
     public Point getMapLocation(short mapID) {
-        if(!containsMap(mapID)) {
+        int position = indexOf(mapID);
+        if(position == -1) {
             return null;
         }
-        int position = mapID - mapStart;
         return new Point(position % width, position / width);
     }
+
+    public void onTouch(P player, int x, int y, ButtonType button) {
+        for(TouchListener<P> listener : listeners) {
+            try {
+                listener.touched(player, x, y, button);
+            }catch(Throwable exception) {
+                Logger.log("&cFailed to handle listener " + listener + ":", exception);
+            }
+        }
+    }
+
+    protected void updateRender(P player) {
+        BufferedImage image = this.image;
+        Graphics2D graphics = this.graphics;
+
+        graphics.clearRect(0, 0, image.getWidth(), image.getHeight());
+
+        for(Renderer<P> renderer : renderers) {
+            renderer.render(image, graphics, player);
+        }
+    }
+
+    protected int indexOf(short mapID) {
+        for(int i = 0; i < mapIDs.length; i++) {
+            if(mapIDs[i] == mapID) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    protected abstract void checkDisposed();
 
     @Override
     public void addRenderer(@NotNull Renderer<P> renderer) {
@@ -101,28 +134,5 @@ public abstract class DefaultDisplay<P> implements Display<P> {
     public @NotNull List<TouchListener<P>> getListeners() {
         return listeners;
     }
-
-    public void onTouch(P player, int x, int y, ButtonType button) {
-        for(TouchListener<P> listener : listeners) {
-            try {
-                listener.touched(player, x, y, button);
-            }catch(Throwable exception) {
-                Logger.log("&cFailed to handle listener " + listener + ":", exception);
-            }
-        }
-    }
-
-    protected void updateRender(P player) {
-        BufferedImage image = this.image;
-        Graphics2D graphics = this.graphics;
-
-        graphics.clearRect(0, 0, image.getWidth(), image.getHeight());
-
-        for(Renderer<P> renderer : renderers) {
-            renderer.render(image, graphics, player);
-        }
-    }
-
-    protected abstract void checkDisposed();
 
 }

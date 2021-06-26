@@ -22,7 +22,7 @@ public class Call {
 
             Class<?> targetAdapter = Class.forName(className);
 
-            adapter = (VersionAdapter) targetAdapter.newInstance();
+            adapter = (VersionAdapter) targetAdapter.getConstructor().newInstance();
         }catch(ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
             // If version is not supported, try using reflection:
 

@@ -23,33 +23,8 @@ public class MapsCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "Usage: /" + label + " <cache/bypass>");
+            sender.sendMessage(ChatColor.RED + "Usage: /" + label + " <bypass>");
             return false;
-        }
-
-        if(args[0].equalsIgnoreCase("cache")) {
-            String state = args.length != 2 ? null : args[1].toLowerCase();
-
-            Palette<?> palette = MapPalette.getPalette();
-
-            if(state == null || !(state.equals("enable") || state.equals("disable"))) {
-                String current = palette.useCache() ? "enabled" : "disabled";
-                sender.sendMessage(ChatColor.RED + "Usage: /" + label + " cache <enable/disable>");
-                sender.sendMessage(ChatColor.WHITE + "The color cache is currently " + ChatColor.AQUA + current);
-                return false;
-            }
-            boolean use = state.equals("enable");
-            palette.useCache(use);
-            if(!use) {
-                palette.clearCache();
-            }
-
-            plugin.getConfig().set("render.colorCache", use);
-            plugin.saveConfig();
-
-            String current = palette.useCache() ? "enabled" : "disabled";
-            sender.sendMessage(ChatColor.WHITE + "The color cache is now " + ChatColor.AQUA + current);
-
         }
 
         if(args[0].equalsIgnoreCase("bypass")) {

@@ -4,7 +4,6 @@ import fr.redstonneur1256.maps.display.DefaultDisplay;
 import fr.redstonneur1256.maps.render.MapPalette;
 import fr.redstonneur1256.maps.spigot.adapter.Call;
 import fr.redstonneur1256.maps.utils.Logger;
-import fr.redstonneur1256.redutilities.graphics.Palette;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -62,7 +61,8 @@ public class BukkitMap {
         int[] rgb = this.tempColors;
         int[] rawColors = this.rawColors;
         byte[] data = this.data;
-        Palette<MapPalette.IDContainer> palette = MapPalette.getPalette();
+        boolean modified = this.modified;
+        byte[] palette = MapPalette.getPalette();
 
         // Use a scan width of DefaultDisplay.MAP_SIZE because the array is made for this size
         image.getRGB(x, y, width, height, rgb, 0, DefaultDisplay.MAP_SIZE);
@@ -71,7 +71,7 @@ public class BukkitMap {
             int color = rgb[i];
             if(rawColors[i] != color) {
                 rawColors[i] = color;
-                byte newColor = palette.matchColor(rgb[i]).getValue();
+                byte newColor = palette[rgb[i] & 0xFFFFFF];
 
                 if(newColor != data[i]) {
                     data[i] = newColor;
@@ -79,6 +79,8 @@ public class BukkitMap {
                 }
             }
         }
+
+        this.modified = modified;
     }
 
     public void send(Player player) {

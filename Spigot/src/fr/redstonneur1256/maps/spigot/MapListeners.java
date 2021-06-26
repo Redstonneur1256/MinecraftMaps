@@ -80,7 +80,8 @@ public class MapListeners implements Listener {
         }
 
         // TODO: Better detection (add a box around displays and check from displays)
-        if(player.getWorld().getNearbyEntities(player.getLocation(), 10, 10, 10)
+        if(player.getWorld()
+                .getNearbyEntities(player.getLocation(), 10, 10, 10)
                 .stream()
                 .noneMatch(entity -> entity instanceof ItemFrame)) {
             return false;
