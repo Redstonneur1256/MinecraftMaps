@@ -16,13 +16,13 @@ How to use in my project:
     * Add jitpack to your project repositories:
       ```groovy
       repositories {
-        maven { url = 'https://jitpack.io' }
+          maven { url = 'https://jitpack.io' }
       }
       ```
     * Add the project as dependency:
       ```groovy
       dependencies {
-        compileOnly 'com.github.Redstonneur1256.MinecraftMaps:API:1.1'
+          compileOnly 'com.github.Redstonneur1256.MinecraftMaps:API:1.2'
       }
       ```
   
